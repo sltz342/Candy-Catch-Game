@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class CandySpawner : MonoBehaviour
 {
@@ -35,10 +37,6 @@ public class CandySpawner : MonoBehaviour
             {
                 maxCandies--;
                 spawnCandy();
-            }
-            else
-            {
-                gameEnded();
             }
             timeBeforeSpawn = Random.Range(1f, 3f);
         }
@@ -85,20 +83,61 @@ public class CandySpawner : MonoBehaviour
         }
 
         Destroy(newCandy.gameObject, 4);
+
+        if(maxCandies == 0)
+        {
+            gameEnded();
+        }
     }
 
 
     [SerializeField] private TMP_Text finalScore;
-
-
+    [SerializeField] private Player myPlayer;
+    [SerializeField] private UnityEngine.UI.Button resetButton;
 
     public void gameEnded()
     {
-        finalScore.color = Color.HSVToRGB(231f, 255f, 90f);
+        finalScore.transform.Translate(new Vector3(0,6,0));
+        int playerScore = myPlayer.getScore();
 
+        if (playerScore >= 0)
+        {
+            finalScore.text = "Final Score Results:\nNot Enough Sugar!";
 
+            if (playerScore > 15)
+            {
+                finalScore.text = "Final Score Results:\nSugar Rush!";
 
+                if (playerScore > 35)
+                {
+                    finalScore.text = "Final Score Results:\nHalloween Mayham!";
 
+                    if (playerScore > 50)
+                    {
+                        finalScore.text = "Final Score Results:\nCandy Craze!";
+
+                    }
+                }
+            }
+
+        }
+
+        Vector3 buttonPos = new Vector3(0,10,0);
+        resetButton.transform.Translate(buttonPos);
+
+    }
+
+    public void onButtonReset()
+    {
+        maxCandies = 15;
+        candyRemaining.text = "Candy Left: " + maxCandies;
+        timeBeforeSpawn = Random.Range(3f, 5f);
+        myPlayer.setScore(0);
+
+        Vector3 buttonPos = new Vector3(0, -800, 0);
+        resetButton.transform.Translate(buttonPos);
+
+        finalScore.transform.Translate(new Vector3(0, -1000, 0));
     }
 
 }

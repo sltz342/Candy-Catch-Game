@@ -44,8 +44,13 @@ public class Player : MonoBehaviour
     }
 
 
-    public void gameEnded()
+    public int getScore()
     {
+        return candyScore;
+    }
 
+    public void setScore(int newScore)
+    {
+        candyScore = newScore;
     }
 }

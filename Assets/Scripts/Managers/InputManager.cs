@@ -17,12 +17,6 @@ public class InputManager : MonoBehaviour
 
         };
 
-        controls.Game.Jump.started += ctx =>
-        {
-            myPlayer.jump();
-        };
-
-
 
         controls.Enable();
 

@@ -9,38 +9,25 @@ public class Player : MonoBehaviour
     //Vars for speeds
     [SerializeField] private float speed;
 
-    //Vars for jumping
-    [SerializeField] private float jumpForce;
-    private Boolean isGrounded;
-    private Rigidbody2D rb;
-    private float depth;
-
-    [SerializeField] private LayerMask groundLayers;
-
-
     //Vars for movement
     private Vector3 _moveDir;
 
-    //For spawning coins
-    [SerializeField] private GameObject coinPrefab;
-
+    //For Candy Scoring
+    int candyScore = 0;
+    [SerializeField] TMP_Text scoreText;
 
 
     void Start()
     {
         InputManager.Init(this);
-
-        rb = GetComponent<Rigidbody2D>();
-        depth = GetComponent<Collider2D>().bounds.size.y;
-
+        scoreText.text = "Score: " + candyScore;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position += transform.rotation * (speed * Time.deltaTime * _moveDir);
-        CheckGround();
-
+        transform.position +=  (speed * Time.deltaTime * _moveDir);
+        
     }
 
     public void setMovementDirection(Vector2 newDirection)
@@ -49,29 +36,16 @@ public class Player : MonoBehaviour
 
     }
 
-    public void spawnBoxOnJ()
+
+    public void gotCandy(int amount)
     {
-        Vector3 coinSpawn = new Vector3(0, 2, 0);
-        GameObject newCoin = Instantiate(coinPrefab, coinSpawn, Quaternion.identity);
-        Destroy(newCoin.gameObject, 4);
+        candyScore += amount;
+        scoreText.text = "Score: " + candyScore;
     }
 
-    public void jump()
-    {
-        Debug.Log("Jump called");
-        if (isGrounded)
-        {
-            rb.AddForce(Vector2.up * jumpForce);
-        }
 
+    public void gameEnded()
+    {
 
     }
-
-    private void CheckGround()
-    {
-        isGrounded = Physics.Raycast(transform.position, Vector2.down, depth, groundLayers);
-
-        Debug.DrawRay(transform.position, Vector2.down * depth, Color.red, 0, false);
-    }
-
 }
